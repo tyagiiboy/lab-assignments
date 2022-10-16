@@ -1,13 +1,11 @@
 package app.acts.library.ui;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import app.acts.library.pojo.Book;
 import app.acts.library.pojo.Stock;
 import app.acts.library.utils.DateValidator;
 
 class AddBookPage {
+	static int q = 1;
 	
 	static boolean run() {
 		System.out.println("Enter book details.");
@@ -37,7 +35,6 @@ class AddBookPage {
 		
 		System.out.print("Quantity: ");
 		String quantity = UI.sc.next();
-		int q = 1;
 		
 		if (!UI.intInputValidator.test(quantity)) System.out.println("Invalid Quantity adding 1(default)");
 		else q = Integer.parseInt(quantity);
@@ -47,16 +44,20 @@ class AddBookPage {
 		
 		if (!UI.library.get(genre).contains(newBook)) UI.library.get(genre).add(newBook);
 		else {
-			Set<Stock> stock = UI.library.get(genre);
-			Iterator<Stock> it = stock.iterator();
-			Stock s;
-			while(it.hasNext()) {
-				s = it.next();
-				if (s.equals(newBook)) {
-					s.setTotal(s.getTotal() + q);
-					break;
-				}
-			}
+			UI.library.get(genre).stream()
+			.filter(stock -> stock.equals(newBook))
+			.forEach(stock -> stock.setTotal(stock.getTotal() + q));
+			
+//			Set<Stock> stock = UI.library.get(genre);
+//			Iterator<Stock> it = stock.iterator();
+//			Stock s;
+//			while(it.hasNext()) {
+//				s = it.next();
+//				if (s.equals(newBook)) {
+//					s.setTotal(s.getTotal() + q);
+//					break;
+//				}
+//			}
 		}
 		return true;
 	}

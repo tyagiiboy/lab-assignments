@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class User {
+public class User implements Comparable<User> {
 	
 	private static Integer START = 100;
 	
@@ -63,6 +63,11 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", name=" + name + ", email=" + email + "]";
+	}
+
+	@Override
+	public int compareTo(User o) {
+		return this.userId.compareTo(o.userId);
 	}
 	
 }
