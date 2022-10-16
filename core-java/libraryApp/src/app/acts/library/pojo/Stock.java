@@ -1,6 +1,6 @@
 package app.acts.library.pojo;
 
-public class Stock {
+public class Stock implements Comparable<Stock> {
 	
 	public Book book;
 	private Integer total;
@@ -44,9 +44,13 @@ public class Stock {
 	}
 
 	@Override
+	public int compareTo(Stock o) {
+		return this.total.compareTo(o.total);
+	}
+
+	@Override
 	public String toString() {
 		return "\n" + book.toString();
 	}
 	
-
 }
