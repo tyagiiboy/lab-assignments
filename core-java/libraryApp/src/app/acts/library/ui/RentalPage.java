@@ -1,6 +1,5 @@
 package app.acts.library.ui;
 
-import java.util.Iterator;
 import java.util.Set;
 
 import app.acts.library.pojo.Book;
@@ -44,33 +43,28 @@ class RentalPage {
 		
 		Stock bookStock = new Stock(book);
 		Set<Stock> stock = UI.library.get(genre);
-		Iterator<Stock> it = stock.iterator();
-		Stock retrievedStock = null;
-		while(it.hasNext()) {
-			retrievedStock = it.next();
-			if (retrievedStock.equals(bookStock)) {
-				break;
-			}
-			else {
-				System.err.println("Invalid Book details");
-				return false;
-			}
+		
+		if (!stock.contains(bookStock)) {
+			System.err.println("Invalid Book details");
+			return false;
 		}
 		
-		int availablity = retrievedStock.getTotal() - retrievedStock.getRented();
-		
-		if (availablity > 0 && check) {
-			book.setPublishDate(retrievedStock.book.getPublishDate());
-			UI.usersList.get(userId).allotedBooks.add(book);
-			retrievedStock.setRented(retrievedStock.getRented() + change);
-			System.out.println("Book added.");
-		} else if (!check) {
-			UI.usersList.get(userId).allotedBooks.remove(book);
-			retrievedStock.setRented(retrievedStock.getRented() + change);
-			System.out.println("Book retrieved.");
-		} else {
-			System.out.println("Out of stock!");
-		}
+		stock.stream().filter(st -> st.equals(bookStock))
+		.forEach(retrievedStock -> {
+			int availablity = retrievedStock.getTotal() - retrievedStock.getRented();
+			if (availablity > 0 && check) {
+				book.setPublishDate(retrievedStock.book.getPublishDate());
+				UI.usersList.get(userId).allotedBooks.add(book);
+				retrievedStock.setRented(retrievedStock.getRented() + change);
+				System.out.println("Book added.");
+			} else if (!check) {
+				UI.usersList.get(userId).allotedBooks.remove(book);
+				retrievedStock.setRented(retrievedStock.getRented() + change);
+				System.out.println("Book retrieved.");
+			} else {
+				System.out.println("Out of stock!");
+			}
+		});
 		
 		return true;
 	}

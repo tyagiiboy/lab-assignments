@@ -64,7 +64,7 @@ public class UI {
 			
 			case "5":
 			{
-				RemoveBook.run();
+				RemoveBookPage.run();
 			} break;
 			
 			case "6":

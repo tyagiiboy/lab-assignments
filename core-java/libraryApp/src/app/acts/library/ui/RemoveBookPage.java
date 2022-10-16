@@ -5,7 +5,7 @@ import java.util.Set;
 import app.acts.library.pojo.Book;
 import app.acts.library.pojo.Stock;
 
-class RemoveBook {
+class RemoveBookPage {
 	static boolean run() {
 		System.out.println("Enter book details.");
 		
