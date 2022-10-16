@@ -7,7 +7,7 @@ import com.jobPortal.lib.JobSeeker;
 import com.jobPortal.lib.ValidationUtil;
 
 public class UpdateDetailsPage {
-	private String choice = "";
+	static String choice = "";
 	public UpdateDetailsPage() {
 		do {
 			JobSeeker record= searchRecord();
