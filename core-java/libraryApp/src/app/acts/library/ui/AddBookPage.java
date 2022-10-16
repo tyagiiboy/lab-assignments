@@ -47,17 +47,6 @@ class AddBookPage {
 			UI.library.get(genre).stream()
 			.filter(stock -> stock.equals(newBook))
 			.forEach(stock -> stock.setTotal(stock.getTotal() + q));
-			
-//			Set<Stock> stock = UI.library.get(genre);
-//			Iterator<Stock> it = stock.iterator();
-//			Stock s;
-//			while(it.hasNext()) {
-//				s = it.next();
-//				if (s.equals(newBook)) {
-//					s.setTotal(s.getTotal() + q);
-//					break;
-//				}
-//			}
 		}
 		return true;
 	}
