@@ -2,7 +2,7 @@ package com.just.at.nn;
 
 import java.time.LocalDate;
 
-public class Product implements Consumable, Comparable<Product> {
+public class Product implements Comparable<Product> {
 
 	private Integer productId;
 	private String productName;
@@ -15,7 +15,7 @@ public class Product implements Consumable, Comparable<Product> {
 	
 	public Product() {
 		this.productId = -1;
-		this.productName = EMPTY_STRING;
+		this.productName = Utils.EMPTY_STRING;
 		this.productStock = 0;
 		this.productAdditionDate = null;
 		this.productPrice = 0.0;
@@ -89,9 +89,13 @@ public class Product implements Consumable, Comparable<Product> {
 	}
 	
 	@Override
-	public boolean equals(Product o) {
-		if (this.productId == o.productId && this.productName == o.productName) return true;
-		return false;
+	public boolean equals(Object o) {
+		if (o == this) return true;
+		if (o.getClass() != this.getClass()) return false;
+		
+		Product product = (Product)o;
+		if (this.productId != product.productId || !this.productName.equals(productName)) return false;
+		return true;
 	}
 
 	@Override
