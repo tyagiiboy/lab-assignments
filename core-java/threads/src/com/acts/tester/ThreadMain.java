@@ -6,7 +6,7 @@ import com.acts.thread.UsingThread;
 public class ThreadMain {
 
 	public static void main(String[] args) {
-		System.out.println("Thread name :" +Thread.currentThread().getName());
+		System.out.println("Thread name :" + Thread.currentThread().getName());
 
 		Thread t1 = new Thread(new UsingRunnable("Printer 0"), "Printer 0");
 		System.out.println("Printer 0 state after creation: " +t1.getState().toString());
@@ -28,7 +28,7 @@ public class ThreadMain {
 			for(int i = 0; i < 4; i++)
 				System.out.println("Thread 1");
 		}) .start();
-		
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -36,7 +36,7 @@ public class ThreadMain {
 					System.out.println("Thread 2");
 			}
 		}).start();
-		
+
 		new Thread(() -> {
 			System.out.println("Thread 3");
 		}) .start();
