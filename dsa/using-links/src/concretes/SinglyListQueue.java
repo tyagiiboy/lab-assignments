@@ -2,21 +2,37 @@ package concretes;
 
 import interfaces.Queue;
 
-public class SinglyListQueue<T> extends SinglyLinkedList<T> implements Queue<T> {
+public class SinglyListQueue<T extends Comparable<T>> implements Queue<T> {
 
+	private SinglyLinkedList<T> list;
+	
+	public SinglyListQueue() {
+		list = new SinglyLinkedList<>();
+	}
+	
 	@Override
 	public void enQueue(T element) {
-		super.insertBack(element);
+		list.addLast(element);
 	}
 
 	@Override
 	public T deQueue() {
-		return super.deleteFront();
+		return list.removeFirst();
 	}
 
 	@Override
 	public T peek() {
-		return super.peekFront();
+		return list.peekFront();
+	}
+
+	@Override
+	public int size() {
+		return list.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return list.isEmpty();
 	}
 
 }

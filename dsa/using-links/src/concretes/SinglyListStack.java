@@ -3,25 +3,37 @@ package concretes;
 import exceptions.SizeUnderFlowException;
 import interfaces.Stack;
 
-public class SinglyListStack<T> extends SinglyLinkedList<T> implements Stack<T> {
+public class SinglyListStack<T extends Comparable<T>> implements Stack<T> {
+	
+	private SinglyLinkedList<T> list;
 	
 	public SinglyListStack() {
-		super();
+		list = new SinglyLinkedList<>();
 	}
 
 	@Override
 	public void push(T element) {
-		super.insertFront(element);
+		list.addFirst(element);
 	}
 
 	@Override
 	public T pop() throws SizeUnderFlowException {
-		return super.deleteFront();
+		return list.removeFirst();
 	}
 
 	@Override
 	public T peek() {
-		return super.peekFront();
+		return list.peekFront();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return list.isEmpty();
+	}
+
+	@Override
+	public int size() {
+		return list.size();
 	}
 	
 }
