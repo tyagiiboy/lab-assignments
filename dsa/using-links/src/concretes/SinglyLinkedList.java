@@ -78,19 +78,47 @@ public class SinglyLinkedList<T extends Comparable<T>> implements LinkedList<T> 
 	}
 	
 	@Override
-	public T delete(T element) {
-		T deletedElement = null;
+	public void delete(T element) {
 		curr = head;
 		while (curr.next != null && !curr.next.data.equals(element))
 			curr = curr.next;
-		if (curr == head) return removeFirst();
-		else if (curr.next == tail) return removeLast();
-		else if (curr.next.data.equals(deletedElement)) {
-			deletedElement = curr.next.data;
+		if (curr == head) removeFirst();
+		else if (curr.next == tail) removeLast();
+		else if (curr.next.data.equals(element)) {
 			curr.next = curr.next.next;
 			size = size - 1;
 		}
-		return deletedElement;
+	}
+
+	@Override
+	public void append(LinkedList<T> list) {
+		if (!list.isEmpty() && !isEmpty()) {
+			tail.next = ((SinglyLinkedList<T>)list).head.next;
+			tail = ((SinglyLinkedList<T>)list).tail;
+			((SinglyLinkedList<T>)list).head.next = null;
+			((SinglyLinkedList<T>)list).tail = ((SinglyLinkedList<T>)list).head;
+		}
+		
+		else if (isEmpty() && !list.isEmpty()) {
+			head = ((SinglyLinkedList<T>)list).head.next;
+			tail = ((SinglyLinkedList<T>)list).tail;
+		}
+	}
+
+	@Override
+	public void prepend(LinkedList<T> list) {
+		list.append(this);
+		append(list);
+	}
+
+	@Override
+	public void append(T element) {
+		addLast(element);
+	}
+
+	@Override
+	public void prepend(T element) {
+		addFirst(element);
 	}
 	
 	@Override

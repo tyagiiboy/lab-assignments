@@ -6,12 +6,12 @@ public class DoublyLinkedList<T extends Comparable<T>> implements LinkedList<T>{
 
 	private class Node {
 		T data;
-		Node left, right;
+		Node prev, next;
 
 		Node(T d, Node l, Node r) {
 			data = d;
-			left = l;
-			right = r;
+			prev = l;
+			next = r;
 		}
 	}
 
@@ -26,7 +26,7 @@ public class DoublyLinkedList<T extends Comparable<T>> implements LinkedList<T>{
 	@Override
 	public void addLast(T element) {
 		Node node = new Node(element, tail, null);
-		tail.right = node;
+		tail.next = node;
 		tail = node;
 		size++;
 	}
@@ -35,16 +35,16 @@ public class DoublyLinkedList<T extends Comparable<T>> implements LinkedList<T>{
 	public T removeLast() {
 		if (isEmpty()) return null;
 		T element = tail.data;
-		tail = tail.left;
-		tail.right = null;
+		tail = tail.prev;
+		tail.next = null;
 		size = size - 1;
 		return element;
 	}
 
 	@Override
 	public void addFirst(T element) {
-		Node node = new Node(element, head, head.right);
-		head.right = node;
+		Node node = new Node(element, head, head.next);
+		head.next = node;
 		if (isEmpty()) tail = node;
 		size++;
 	}
@@ -52,8 +52,8 @@ public class DoublyLinkedList<T extends Comparable<T>> implements LinkedList<T>{
 	@Override
 	public T removeFirst() {
 		if (isEmpty()) return null;
-		T element = head.right.data;
-		head.right = head.right.right;
+		T element = head.next.data;
+		head.next = head.next.next;
 		if (isEmpty()) tail = head;
 		size--; return element;
 	}
@@ -65,30 +65,60 @@ public class DoublyLinkedList<T extends Comparable<T>> implements LinkedList<T>{
 			return;
 		}
 		curr = head;
-		while (curr.right.data.compareTo(element) != 1 && curr.right != null) 
-			curr = curr.right;
-		Node node = new Node(element, curr, curr.right);
-		curr.right = node;
-		node.right.left = node;
-		if (curr == tail) tail = curr.right;
+		while (curr.next != null && curr.next.data.compareTo(element) != 1) 
+			curr = curr.next;
+		Node node = new Node(element, curr, curr.next);
+		curr.next = node;
+		node.next.prev = node;
+		if (curr == tail) tail = curr.next;
 		size = size + 1;
 	}
 
 	@Override
-	public T delete(T element) {
-		T deletedElement = null;
+	public void delete(T element) {
 		curr = head;
-		while (curr.right != null && !curr.right.data.equals(element))
-			curr = curr.right;
-		if (curr == head) return removeFirst();
-		else if (curr.right == tail) return removeLast();
-		else if (curr.right.data.equals(deletedElement)) {
-			deletedElement = curr.right.data;
-			curr.right.right.left = curr;
-			curr.right = curr.right.right;
+		while (curr.next != null && !curr.next.data.equals(element))
+			curr = curr.next;
+		if (curr == head) removeFirst();
+		else if (curr.next == tail) removeLast();
+		else if (curr.next.data.equals(element)) {
+			curr.next.next.prev = curr;
+			curr.next = curr.next.next;
 			size = size - 1;
 		}
-		return deletedElement;
+	}
+
+	@Override
+	public void append(LinkedList<T> list) {
+		if (!list.isEmpty() && !this.isEmpty()) {
+			tail.next = ((DoublyLinkedList<T>)list).head.next;
+			((DoublyLinkedList<T>)list).head.next.prev = tail;
+			tail = ((DoublyLinkedList<T>)list).tail;
+			((DoublyLinkedList<T>)list).head.next = null;
+			((DoublyLinkedList<T>)list).tail = ((DoublyLinkedList<T>)list).head;
+		}
+		
+		else if (this.isEmpty() && !list.isEmpty()) {
+			this.head = ((DoublyLinkedList<T>)list).head.next;
+			((DoublyLinkedList<T>)list).head.next.prev = this.head;
+			this.tail = ((DoublyLinkedList<T>)list).tail;
+		}
+	}
+
+	@Override
+	public void prepend(LinkedList<T> list) {
+		list.append(this);
+		append(list);
+	}
+
+	@Override
+	public void append(T element) {
+		addLast(element);
+	}
+
+	@Override
+	public void prepend(T element) {
+		addFirst(element);
 	}
 
 	@Override
@@ -102,29 +132,31 @@ public class DoublyLinkedList<T extends Comparable<T>> implements LinkedList<T>{
 	@Override
 	public void reverse(boolean usingRecursion) {
 		if (isEmpty() || size() == 1) return;
-		curr = head.right;			// iterating from first node
-		curr.left = null;			// removing link to the dummy head node
+		curr = head.next;			// iterating from first node
+		curr.prev = null;			// removing link to the dummy head node
 		Node temp;
 		// to swap the links
 		while (curr != null) {
-			temp = curr.right;
-			curr.right = curr.left;
-			curr.left = temp;
-			curr = curr.left;
+			temp = curr.next;
+			curr.next = curr.prev;
+			curr.prev = temp;
+			curr = curr.prev;
 		}
-		temp = head.right;
-		tail.left = head;
-		head.right = tail;
+		temp = head.next;
+		tail.prev = head;
+		head.next = tail;
 		tail = temp;
 	}
 
 	@Override
 	public T peekFront() {
-		return head.right.data;
+		if (isEmpty()) return null;
+		return head.next.data;
 	}
 
 	@Override
 	public T peekBack() {
+		if (isEmpty()) return null;
 		return tail.data;
 	}
 
@@ -135,7 +167,7 @@ public class DoublyLinkedList<T extends Comparable<T>> implements LinkedList<T>{
 
 	@Override
 	public boolean isEmpty() {
-		return head == tail || head.right == null;
+		return head == tail || head.next == null;
 	}
 
 	@Override
@@ -143,15 +175,15 @@ public class DoublyLinkedList<T extends Comparable<T>> implements LinkedList<T>{
 		if (isEmpty()) return "[]";
 
 		StringBuilder sb = new StringBuilder();
-		curr = head.right;
+		curr = head.next;
 		sb.append("[");
 		while (curr != null) {
-			if (curr.right == null) {
+			if (curr.next == null) {
 				sb.append(curr.data.toString());
 			} else {
 				sb.append(curr.data.toString() + ", ");
 			}
-			curr = curr.right;
+			curr = curr.next;
 		}
 		sb.append("]");
 		return sb.toString();
