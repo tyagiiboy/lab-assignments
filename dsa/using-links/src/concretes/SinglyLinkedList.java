@@ -131,13 +131,12 @@ public class SinglyLinkedList<T extends Comparable<T>> implements LinkedList<T> 
 	
 	private void reverseIterative(Node currentNode) {
 		Node previousNode = null, nextNode = currentNode.next;
-		do {
+		while (currentNode != null) {
 			currentNode.next = previousNode;
 			previousNode = currentNode;
 			currentNode = nextNode;
 			nextNode = nextNode.next;
-		} while (nextNode != null);
-		currentNode.next = previousNode;
+		}
 	}
 	
 	private void reverseRecursive(Node currentNode, Node perviousNode) {
