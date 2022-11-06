@@ -24,8 +24,8 @@ public class CircularLinkedList<T extends Comparable<T>> implements LinkedList<T
 	}
 	
 	private void addFirstNode(T element) {
-		Node node = new Node(element, head.prev, head.next);
-		head.next.prev = node;
+		Node node = new Node(element, head, head.next);
+		head.next = node;
 		head.prev = node;
 		size++;
 	}
@@ -48,8 +48,7 @@ public class CircularLinkedList<T extends Comparable<T>> implements LinkedList<T
 			addFirstNode(element); return;
 		}
 		Node node = new Node(element, head, head.next);
-		head.next.prev = node;
-		head.next = node;
+		head.next.prev = head.next = node;
 		size++;
 	}
 	
@@ -162,7 +161,7 @@ public class CircularLinkedList<T extends Comparable<T>> implements LinkedList<T
 		StringBuilder sb = new StringBuilder();
 		Node curr = head.next;
 		sb.append("[");
-		while (curr.next != head.next) {
+		while (curr != head) {
 			sb.append(curr.data.toString() + ", ");
 			curr = curr.next;
 		}
@@ -172,17 +171,26 @@ public class CircularLinkedList<T extends Comparable<T>> implements LinkedList<T
 
 	@Override
 	public void append(LinkedList<T> list) {
-		if (!list.isEmpty() && !this.isEmpty()) {
-			head.prev.next = ((CircularLinkedList<T>)list).head.next;
-			((CircularLinkedList<T>)list).head.next.prev = head.prev;
-			head.prev = ((CircularLinkedList<T>)list).head.prev;
-			((CircularLinkedList<T>)list).head.next = ((CircularLinkedList<T>)list).head;
-			((CircularLinkedList<T>)list).head.prev = ((CircularLinkedList<T>)list).head;
+		CircularLinkedList<T> secondList = (CircularLinkedList<T>)list;
+		if (!secondList.isEmpty() && !this.isEmpty()) {
+			Node 	firstListLastNode = this.head.prev, 
+					secondListFirstNode = secondList.head.next, 
+					secondListLastNode = secondList.head.prev;
+			
+			firstListLastNode.next = secondListFirstNode;
+			secondListFirstNode.prev = firstListLastNode;
+			this.head.prev = secondListLastNode;
+			secondListLastNode.next = this.head;
+			secondList.head.next = secondList.head.prev = secondList.head;
+			secondList.size = 0;
 		}
 		
-		else if (this.isEmpty() && !list.isEmpty()) {
-			this.head = ((CircularLinkedList<T>)list).head.next;
-			((CircularLinkedList<T>)list).head.next.prev = this.head;
+		else if (this.isEmpty() && secondList.isEmpty()) {
+			Node temp = this.head;
+			this.head = secondList.head;
+			secondList.head = temp;
+			this.size = secondList.size;
+			secondList.size = 0;
 		}
 	}
 

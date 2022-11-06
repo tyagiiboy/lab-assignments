@@ -90,18 +90,22 @@ public class DoublyLinkedList<T extends Comparable<T>> implements LinkedList<T>{
 
 	@Override
 	public void append(LinkedList<T> list) {
+		DoublyLinkedList<T> secondList = (DoublyLinkedList<T>)list;
 		if (!list.isEmpty() && !this.isEmpty()) {
-			tail.next = ((DoublyLinkedList<T>)list).head.next;
-			((DoublyLinkedList<T>)list).head.next.prev = tail;
-			tail = ((DoublyLinkedList<T>)list).tail;
-			((DoublyLinkedList<T>)list).head.next = null;
-			((DoublyLinkedList<T>)list).tail = ((DoublyLinkedList<T>)list).head;
+			tail.next = secondList.head.next;
+			secondList.head.next.prev = tail;
+			tail = secondList.tail;
+			secondList.head.next = null;
+			secondList.tail = secondList.head;
+			secondList.size = 0;
 		}
 		
 		else if (this.isEmpty() && !list.isEmpty()) {
-			this.head = ((DoublyLinkedList<T>)list).head.next;
-			((DoublyLinkedList<T>)list).head.next.prev = this.head;
-			this.tail = ((DoublyLinkedList<T>)list).tail;
+			this.head = secondList.head.next;
+			secondList.head.next.prev = this.head;
+			this.tail = secondList.tail;
+			this.size = secondList.size;
+			secondList.size = 0;
 		}
 	}
 

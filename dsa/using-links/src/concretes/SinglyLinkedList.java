@@ -92,16 +92,21 @@ public class SinglyLinkedList<T extends Comparable<T>> implements LinkedList<T> 
 
 	@Override
 	public void append(LinkedList<T> list) {
+		SinglyLinkedList<T> secondList = (SinglyLinkedList<T>)list;
 		if (!list.isEmpty() && !isEmpty()) {
-			tail.next = ((SinglyLinkedList<T>)list).head.next;
-			tail = ((SinglyLinkedList<T>)list).tail;
-			((SinglyLinkedList<T>)list).head.next = null;
-			((SinglyLinkedList<T>)list).tail = ((SinglyLinkedList<T>)list).head;
+			tail.next = secondList.head.next;
+			tail = secondList.tail;
+			secondList.head.next = null;
+			secondList.tail = secondList.head;
+			size += secondList.size;
+			secondList.size = 0;
 		}
 		
 		else if (isEmpty() && !list.isEmpty()) {
-			head = ((SinglyLinkedList<T>)list).head.next;
-			tail = ((SinglyLinkedList<T>)list).tail;
+			head = secondList.head.next;
+			tail = secondList.tail;
+			size = secondList.size;
+			secondList.size = 0;			
 		}
 	}
 
