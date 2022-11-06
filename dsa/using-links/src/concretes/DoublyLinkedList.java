@@ -91,6 +91,7 @@ public class DoublyLinkedList<T extends Comparable<T>> implements LinkedList<T>{
 	@Override
 	public void append(LinkedList<T> list) {
 		DoublyLinkedList<T> secondList = (DoublyLinkedList<T>)list;
+		
 		if (!list.isEmpty() && !this.isEmpty()) {
 			tail.next = secondList.head.next;
 			secondList.head.next.prev = tail;

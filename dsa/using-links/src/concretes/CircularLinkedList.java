@@ -155,23 +155,9 @@ public class CircularLinkedList<T extends Comparable<T>> implements LinkedList<T
 	}
 
 	@Override
-	public String toString() {
-		if (isEmpty()) return "[]";
-
-		StringBuilder sb = new StringBuilder();
-		Node curr = head.next;
-		sb.append("[");
-		while (curr != head) {
-			sb.append(curr.data.toString() + ", ");
-			curr = curr.next;
-		}
-		sb.append("]");
-		return sb.toString();
-	}
-
-	@Override
 	public void append(LinkedList<T> list) {
 		CircularLinkedList<T> secondList = (CircularLinkedList<T>)list;
+		
 		if (!secondList.isEmpty() && !this.isEmpty()) {
 			Node 	firstListLastNode = this.head.prev, 
 					secondListFirstNode = secondList.head.next, 
@@ -208,6 +194,21 @@ public class CircularLinkedList<T extends Comparable<T>> implements LinkedList<T
 	@Override
 	public void prepend(T element) {
 		addFirst(element);
+	}
+
+	@Override
+	public String toString() {
+		if (isEmpty()) return "[]";
+
+		StringBuilder sb = new StringBuilder();
+		Node curr = head.next;
+		sb.append("[");
+		while (curr.next != head) {
+			sb.append(curr.data.toString() + ", ");
+			curr = curr.next;
+		}
+		sb.append(curr.data + "]");
+		return sb.toString();
 	}
 
 }
