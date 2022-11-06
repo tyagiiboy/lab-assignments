@@ -16,5 +16,5 @@ public interface LinkedList<T extends Comparable<T>> {
 	int size();
 	boolean isEmpty();
 	void sort();
-	void reverse(boolean usingRecursion);
+	void reverse();
 }

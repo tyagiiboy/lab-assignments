@@ -33,7 +33,8 @@ public class CircularLinkedList<T extends Comparable<T>> implements LinkedList<T
 	@Override
 	public void addLast(T element) {
 		if (isEmpty()) {
-			addFirstNode(element); return;
+			addFirstNode(element); 
+			return;
 		}
 		
 		Node node = new Node(element, head.prev, head);
@@ -116,9 +117,9 @@ public class CircularLinkedList<T extends Comparable<T>> implements LinkedList<T
 	}
 
 	@Override
-	public void reverse(boolean usingRecursion) {
+	public void reverse() {
 		if (isEmpty() || size() == 1) return;
-		Node t, p = head.prev, c = head, n = head.next;
+		Node t, c = head, n = head.next;
 		
 		do {
 			// swapping prev and next links of current node
@@ -127,7 +128,6 @@ public class CircularLinkedList<T extends Comparable<T>> implements LinkedList<T
 			c.prev = t;
 			
 			// iterating further
-			p = c;
 			c = n;
 			n = n.next;
 		} while (c != head);
@@ -160,7 +160,7 @@ public class CircularLinkedList<T extends Comparable<T>> implements LinkedList<T
 		if (isEmpty()) return "[]";
 
 		StringBuilder sb = new StringBuilder();
-		curr = head.next;
+		Node curr = head.next;
 		sb.append("[");
 		while (curr.next != head.next) {
 			sb.append(curr.data.toString() + ", ");
@@ -172,19 +172,18 @@ public class CircularLinkedList<T extends Comparable<T>> implements LinkedList<T
 
 	@Override
 	public void append(LinkedList<T> list) {
-//		if (!list.isEmpty() && !this.isEmpty()) {
-//			tail.next = ((DoublyLinkedList<T>)list).head.next;
-//			((DoublyLinkedList<T>)list).head.next.prev = tail;
-//			tail = ((DoublyLinkedList<T>)list).tail;
-//			((DoublyLinkedList<T>)list).head.next = null;
-//			((DoublyLinkedList<T>)list).tail = ((DoublyLinkedList<T>)list).head;
-//		}
-//		
-//		else if (this.isEmpty() && !list.isEmpty()) {
-//			this.head = ((DoublyLinkedList<T>)list).head.next;
-//			((DoublyLinkedList<T>)list).head.next.prev = this.head;
-//			this.tail = ((DoublyLinkedList<T>)list).tail;
-//		}
+		if (!list.isEmpty() && !this.isEmpty()) {
+			head.prev.next = ((CircularLinkedList<T>)list).head.next;
+			((CircularLinkedList<T>)list).head.next.prev = head.prev;
+			head.prev = ((CircularLinkedList<T>)list).head.prev;
+			((CircularLinkedList<T>)list).head.next = ((CircularLinkedList<T>)list).head;
+			((CircularLinkedList<T>)list).head.prev = ((CircularLinkedList<T>)list).head;
+		}
+		
+		else if (this.isEmpty() && !list.isEmpty()) {
+			this.head = ((CircularLinkedList<T>)list).head.next;
+			((CircularLinkedList<T>)list).head.next.prev = this.head;
+		}
 	}
 
 	@Override

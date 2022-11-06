@@ -130,7 +130,7 @@ public class DoublyLinkedList<T extends Comparable<T>> implements LinkedList<T>{
 	}
 
 	@Override
-	public void reverse(boolean usingRecursion) {
+	public void reverse() {
 		if (isEmpty() || size() == 1) return;
 		curr = head.next;			// iterating from first node
 		curr.prev = null;			// removing link to the dummy head node

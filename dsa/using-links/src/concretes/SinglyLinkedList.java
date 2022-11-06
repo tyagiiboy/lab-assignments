@@ -145,11 +145,17 @@ public class SinglyLinkedList<T extends Comparable<T>> implements LinkedList<T> 
 		currentNode.next = perviousNode;
 	}
 	
+	public void reverseRecursive() {
+		reverseRecursive(head.next, null);
+		Node temp = head.next;
+		head.next = tail;
+		tail = temp;
+	}
+	
 	@Override
-	public void reverse(boolean usingRecursion) {
+	public void reverse() {
 		if (isEmpty()) return;
-		if (usingRecursion) reverseRecursive(head.next, null);
-		else reverseIterative(head.next);
+		reverseIterative(head.next);
 		Node temp = head.next;
 		head.next = tail;
 		tail = temp;
